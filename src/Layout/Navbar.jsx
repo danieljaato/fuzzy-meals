@@ -172,7 +172,7 @@ const Navbar = () => {
         </button>
               
       </nav>
-<div className="bg-rose-50 text-xs py-1.5 px-4 border-b border-rose-100 flex items-center justify-between">
+<div className=" flex animate-marquee bg-rose-50 text-xs py-1.5 px-4 border-b border-rose-100 flex items-center justify-between">
         <div className="flex items-center gap-1.5 text-rose-700 font-medium">
           <Zap className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
           <span>Island Express Live (25-35m)</span>
