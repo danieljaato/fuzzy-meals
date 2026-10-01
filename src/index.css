@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@theme {
+ROOT {
   /* Colors */
   --color-surface: #f9f9ff;
   --color-surface-dim: #cfdaf2;
