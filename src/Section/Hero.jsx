@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import fu from '../assets/fu.png';
 import { useCart } from '../context/CartContext';
 import { 
@@ -59,7 +59,6 @@ const PERK_FEATURES = [
   'Warmth insulated bag',
 ];
 
-// Defined DISHES array
 const DISHES = [
   {
     id: 1,
@@ -117,7 +116,6 @@ const DISHES = [
   }
 ];
 
-// Defined REVIEWS array
 const REVIEWS = [
   {
     id: 1,
@@ -148,9 +146,8 @@ const REVIEWS = [
   }
 ];
 
-// Reusable Sub-Component for Stat Badge
 const StatCard = ({ icon: Icon, number = "40+ Years", text = "of Nigerian cooking excellence" }) => (
-  <div className="w-full sm:w-72 lg:w-80 rounded-2xl bg-[#FDF5F5] p-6 text-center shadow-sm flex flex-col items-center justify-center">
+  <div className="w-full sm:w-72 lg:w-80 rounded-2xl bg-[#FDF5F5] p-6 text-center shadow-xs flex flex-col items-center justify-center">
     <div className="mb-4 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-white shadow-xs">
       {Icon ? (
         <Icon className="h-7 w-7 sm:h-8 sm:w-8 text-[#5C0612]" />
@@ -166,18 +163,12 @@ const StatCard = ({ icon: Icon, number = "40+ Years", text = "of Nigerian cookin
 );
 
 const Hero = () => {
-  const { addToCart } = useCart();
-
-  // Defined local quick cart state for the summary section
-  const [cart] = useState([
-    { name: '1x Royal Firewood Jollof', detail: 'Extra Plantain + Hot Pepper Sauce', price: 4200 },
-    { name: '1x Suya Jumbo Wings (6pcs)', detail: 'Acacia Honey Glaze', price: 3800 },
-  ]);
+  const { cart, addToCart, cartTotal, handleCheckout } = useCart();
 
   const deliveryFee = 800;
   const discount = 1200;
-  const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-  const total = subtotal + deliveryFee - discount;
+  const subtotal = cartTotal || 0;
+  const total = subtotal > 0 ? subtotal + deliveryFee - discount : 0;
 
   return (
     <div className="w-full min-h-screen bg-[#20b2a6]/10 px-4 py-6 sm:px-8 sm:py-10 md:px-12 md:py-12 flex flex-col gap-8 md:gap-12 relative overflow-hidden">
@@ -216,7 +207,7 @@ const Hero = () => {
                 {AVATARS.map((avatar, idx) => (
                   <div
                     key={idx}
-                    className={`inline-flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full text-xs font-bold border-2 border-white shadow-sm ${avatar.bg}`}
+                    className={`inline-flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full text-xs font-bold border-2 border-white shadow-xs ${avatar.bg}`}
                   >
                     {avatar.label}
                   </div>
@@ -283,7 +274,7 @@ const Hero = () => {
               return (
                 <div
                   key={index}
-                  className="flex items-start gap-3 bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-gray-100"
+                  className="flex items-start gap-3 bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-xs border border-gray-100"
                 >
                   <div className={`flex-shrink-0 p-2.5 rounded-lg ${feature.bgColor} ${feature.iconColor}`}>
                     <Icon className="w-5 h-5" />
@@ -321,7 +312,6 @@ const Hero = () => {
 
           {/* FOOD GRID */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Main Large Item */}
             <div className="md:col-span-2 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs flex flex-col sm:flex-row">
               <div className="sm:w-1/2 relative min-h-[220px]">
                 <img src={DISHES[0].image} alt={DISHES[0].title} className="w-full h-full object-cover" />
@@ -350,7 +340,6 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* Secondary Items */}
             {DISHES.slice(1).map((dish) => (
               <div key={dish.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs flex flex-col justify-between p-4">
                 <div>
@@ -382,7 +371,7 @@ const Hero = () => {
           </div>
         </section>
 
-        {/* SEAMLESS ORDERING / QUICK CART SECTION */}
+        {/* QUICK CART / CHECKOUT SECTION */}
         <section className="bg-slate-100/70 border-y border-slate-200 py-12 my-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
@@ -413,7 +402,7 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* Quick Cart Preview Card */}
+            {/* Live Cart Preview */}
             <div className="lg:col-span-5">
               <div className="bg-white rounded-2xl border border-slate-200 shadow-xl p-5 space-y-4">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -421,28 +410,38 @@ const Hero = () => {
                     <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
                     <h3 className="font-extrabold text-slate-900 text-sm">Your Quick Cart</h3>
                   </div>
-                  <span className="text-xs font-bold bg-orange-100 text-[#b32b00] px-2 py-0.5 rounded-full">{cart.length} Items</span>
+                  <span className="text-xs font-bold bg-orange-100 text-[#b32b00] px-2 py-0.5 rounded-full">
+                    {cart?.length || 0} Items
+                  </span>
                 </div>
 
                 <div className="space-y-3 text-xs">
-                  {cart.map((item, idx) => (
-                    <div key={idx} className="flex justify-between items-start border-b border-slate-50 pb-2">
-                      <div>
-                        <span className="font-bold text-slate-800">{item.name}</span>
-                        <p className="text-[11px] text-slate-400">{item.detail}</p>
+                  {cart && cart.length > 0 ? (
+                    cart.map((item, idx) => (
+                      <div key={idx} className="flex justify-between items-start border-b border-slate-50 pb-2">
+                        <div>
+                          <span className="font-bold text-slate-800">{item.title || item.name}</span>
+                          <p className="text-[11px] text-slate-400">{item.detail || 'Standard Portion'}</p>
+                        </div>
+                        <span className="font-bold text-slate-900">₦{item.price?.toLocaleString()}</span>
                       </div>
-                      <span className="font-bold text-slate-900">₦{item.price.toLocaleString()}</span>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p className="text-slate-400 text-center py-2">Your cart is currently empty.</p>
+                  )}
 
-                  <div className="flex justify-between items-center text-slate-500 pt-1">
-                    <span>Delivery (Victoria Island)</span>
-                    <span className="font-semibold text-slate-700">₦{deliveryFee.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between items-center text-emerald-600 font-medium">
-                    <span>Promo Applied (FUZZYHOT)</span>
-                    <span>-₦{discount.toLocaleString()}</span>
-                  </div>
+                  {cart && cart.length > 0 && (
+                    <>
+                      <div className="flex justify-between items-center text-slate-500 pt-1">
+                        <span>Delivery (Victoria Island)</span>
+                        <span className="font-semibold text-slate-700">₦{deliveryFee.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-emerald-600 font-medium">
+                        <span>Promo Applied (FUZZYHOT)</span>
+                        <span>-₦{discount.toLocaleString()}</span>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 <div className="border-t border-slate-200 pt-3 flex items-center justify-between">
@@ -450,7 +449,11 @@ const Hero = () => {
                   <span className="text-xl font-black text-[#b32b00]">₦{total.toLocaleString()}</span>
                 </div>
 
-                <button className="w-full bg-[#b32b00] hover:bg-orange-800 text-white font-bold py-3 rounded-xl text-sm shadow-md transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                <button 
+                  onClick={handleCheckout}
+                  disabled={!cart || cart.length === 0}
+                  className="w-full bg-[#b32b00] hover:bg-orange-800 disabled:opacity-50 text-white font-bold py-3 rounded-xl text-sm shadow-md transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                >
                   <Lock className="w-4 h-4" /> Pay ₦{total.toLocaleString()} with Paystack
                 </button>
 
@@ -463,7 +466,7 @@ const Hero = () => {
           </div>
         </section>
 
-        {/* REVIEWS / TESTIMONIALS SECTION */}
+        {/* REVIEWS SECTION */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-[11px] font-bold text-[#b32b00] uppercase tracking-wider">Lagos Foodie Stories</span>
@@ -493,7 +496,7 @@ const Hero = () => {
           </div>
         </section>
 
-        {/* Floating Stat Card Showcase Section */}
+        {/* STAT CARDS SHOWCASE */}
         <div className="flex justify-center items-center w-full py-4 sm:py-6 gap-4 sm:gap-6 flex-wrap">
           <div className="w-full sm:w-auto animate-bounce hover:[animation-play-state:paused] flex justify-center">
             <StatCard number="40+ Years" text="of Nigerian cooking excellence" />

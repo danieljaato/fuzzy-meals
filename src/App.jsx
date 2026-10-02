@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./Layout/Navbar.jsx";
-import Hero from "./Section/Hero.jsx";
+import  Hero  from './Section/Hero';
 import About from "./Section/About.jsx";
 import Menu from "./Section/Menu.jsx";
 import Contact from "./Section/Contact.jsx";
