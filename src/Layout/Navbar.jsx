@@ -7,7 +7,7 @@ import {
   ShoppingBag,
   ShieldCheck,
   ChevronDown,
-  Zap
+  Zap,
 } from "lucide-react";
 import { usePaystackPayment } from "react-paystack";
 import { useCart } from "../context/CartContext";
@@ -16,20 +16,21 @@ import DAN from "../assets/DAN.png";
 const Navbar = () => {
   const [location, setLocation] = useState("Victoria Island, Lagos");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
-  // Consume shared cart state
-  const { cart } = useCart();
- // Single Add-To-Cart Handler
+
+  // Consume shared cart state and setter
+  const { cart, setCart } = useCart();
+
+  // Single Add-To-Cart Handler
   const handleAddToCart = (itemName, price) => {
     setCart((prev) => ({
-      count: prev.count + 1,
-      total: prev.total + price,
-      items: [...prev.items, { name: itemName, price }],
+      ...prev,
+      count: (prev?.count || 0) + 1,
+      total: (prev?.total || 0) + price,
+      items: [...(prev?.items || []), { name: itemName, price }],
     }));
   };
 
-  
-  // Define closeMobileMenu handler
+  // Handler to close mobile menu
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
@@ -37,17 +38,22 @@ const Navbar = () => {
   const paystackConfig = {
     reference: new Date().getTime().toString(),
     email: "customer@example.com",
-    amount: (cart.total > 0 ? cart.total : 5000) * 100, // Dynamic amount in kobo
+    amount: (cart?.total > 0 ? cart.total : 5000) * 100, // Dynamic amount in kobo
     publicKey: "pk_test_xxxxxxxxxxxxxxxxxxxxxxxx",
   };
 
   const initializePayment = usePaystackPayment(paystackConfig);
 
   const handlePayment = () => {
-    initializePayment(
-      () => console.log("Payment successful"),
-      () => console.log("Payment cancelled")
-    );
+    const onSuccess = (reference) => {
+      console.log("Payment successful", reference);
+    };
+
+    const onClose = () => {
+      console.log("Payment cancelled");
+    };
+
+    initializePayment({ onSuccess, onClose });
   };
 
   return (
