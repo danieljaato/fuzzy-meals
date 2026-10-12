@@ -3,14 +3,62 @@ import { ShoppingCart, Search, Plus, Minus, X, Trash2 } from 'lucide-react';
 
 // Sample menu items based on the Mama Cass menu
 const INITIAL_PRODUCTS = [
-  { id: 1, name: 'Smoky Jollof Rice', price: 2000, category: 'Rice' },
-  { id: 2, name: 'Fried Plantain (Dodo)', price: 800, category: 'Sides' },
-  { id: 3, name: 'Roasted Chicken', price: 4500, category: 'Protein' },
-  { id: 4, name: 'Pounded Yam', price: 800, category: 'Swallow' },
-  { id: 5, name: 'Egusi Soup', price: 1500, category: 'Soups' },
-  { id: 6, name: 'Suya Spaghetti', price: 3500, category: 'Pasta' },
-  { id: 7, name: 'Moi Moi', price: 1000, category: 'Sides' },
-  { id: 8, name: 'Supreme Ice Cream 500ML', price: 2800, category: 'Drinks & Desserts' },
+  {
+    id: 1,
+    name: 'Smoky Jollof Rice',
+    price: 2000,
+    category: 'Rice',
+    image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600'
+  },
+  {
+    id: 2,
+    name: 'Fried Plantain (Dodo)',
+    price: 800,
+    category: 'Sides',
+    image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600'
+  },
+  {
+    id: 3,
+    name: 'Roasted Chicken',
+    price: 4500,
+    category: 'Protein',
+    image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=600'
+  },
+  {
+    id: 4,
+    name: 'Pounded Yam',
+    price: 800,
+    category: 'Swallow',
+    image: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600'
+  },
+  {
+    id: 5,
+    name: 'Egusi Soup',
+    price: 1500,
+    category: 'Soups',
+    image: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600'
+  },
+  {
+    id: 6,
+    name: 'Suya Spaghetti',
+    price: 3500,
+    category: 'Pasta',
+    image: 'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?w=600'
+  },
+  {
+    id: 7,
+    name: 'Moi Moi',
+    price: 1000,
+    category: 'Sides',
+    image: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600'
+  },
+  {
+    id: 8,
+    name: 'Supreme Ice Cream 500ML',
+    price: 2800,
+    category: 'Drinks & Desserts',
+    image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=600'
+  },
 ];
 
 export default function FoodOrderingApp() {
@@ -111,10 +159,14 @@ export default function FoodOrderingApp() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {filteredProducts.map((product) => (
             <div key={product.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col hover:shadow-md transition">
-              <div className="h-48 bg-gray-100 flex items-center justify-center text-gray-400 relative">
-                <span className="text-sm font-medium"><img src=''
-                                                            alt=''/></span>
-              </div>
+             <div className="h-48 bg-gray-100 overflow-hidden">
+  <img
+    src={product.image}
+    alt={product.name}
+    className="w-full h-full object-cover"
+    loading="lazy"
+  />
+</div>
               <div className="p-5 flex flex-col flex-grow justify-between">
                 <div>
                   <span className="text-xs font-semibold text-red-600 uppercase tracking-wider">{product.category}</span>
