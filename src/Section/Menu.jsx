@@ -112,7 +112,8 @@ export default function FoodOrderingApp() {
           {filteredProducts.map((product) => (
             <div key={product.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col hover:shadow-md transition">
               <div className="h-48 bg-gray-100 flex items-center justify-center text-gray-400 relative">
-                <span className="text-sm font-medium">Meal Preview</span>
+                <span className="text-sm font-medium"><img src=''
+                                                            alt=''/></span>
               </div>
               <div className="p-5 flex flex-col flex-grow justify-between">
                 <div>
